@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lost in Translation — English Adventure</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #f5f0e8;
+    --cream: #ede8dc;
+    --accent: #c9411a;
+    --gold: #d4a843;
+    --muted: #8a7f72;
+    --correct: #2d6a4f;
+    --wrong: #9b2226;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* GRAIN TEXTURE */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 1000;
+    opacity: 0.6;
+  }
+
+  /* SCREEN */
+  .screen {
+    display: none;
+    min-height: 100vh;
+    animation: fadeIn 0.6s ease forwards;
+  }
+  .screen.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ====== COVER ====== */
+  #cover {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+  }
+
+  .cover-left {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 60px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover-left::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; right: -80px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    border: 2px solid rgba(212,168,67,0.3);
+  }
+  .cover-left::before {
+    content: '';
+    position: absolute;
+    bottom: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    border: 1px solid rgba(212,168,67,0.2);
+  }
+
+  .cover-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .cover-issue {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+  }
+
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(48px, 6vw, 80px);
+    font-weight: 900;
+    line-height: 0.95;
+    margin: 40px 0 20px;
+  }
+
+  .cover-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .cover-subtitle {
+    font-size: 16px;
+    color: rgba(245,240,232,0.7);
+    line-height: 1.6;
+    max-width: 340px;
+    margin-bottom: 50px;
+  }
+
+  .cover-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--accent);
+    color: white;
+    padding: 16px 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: fit-content;
+  }
+  .cover-btn:hover {
+    background: var(--gold);
+    color: var(--ink);
+    transform: translateX(4px);
+  }
+
+  .cover-right {
+    background: var(--cream);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 40px;
+    position: relative;
+  }
+
+  .city-illustration {
+    font-size: 120px;
+    line-height: 1;
+    margin-bottom: 30px;
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.1));
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  .cover-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--ink);
+    border: 1px solid var(--ink);
+    width: 100%;
+    max-width: 360px;
+  }
+  .stat {
+    background: var(--cream);
+    padding: 16px 12px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ====== QUESTION SCREEN ====== */
+  #question-screen {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  .progress-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 50px;
+    padding-top: 20px;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(26,20,16,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.5s ease;
+  }
+
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* STORY CARD */
+  .story-card {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 40px 44px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .story-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+  }
+
+  .story-location {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .story-scene {
+    font-size: 56px;
+    margin-bottom: 20px;
+  }
+
+  .story-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 3vw, 26px);
+    line-height: 1.5;
+    font-style: italic;
+    margin-bottom: 16px;
+  }
+
+  .story-context {
+    font-size: 14px;
+    color: rgba(245,240,232,0.65);
+    line-height: 1.7;
+  }
+
+  /* GRAMMAR FOCUS */
+  .grammar-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(212,168,67,0.15);
+    border: 1px solid rgba(212,168,67,0.3);
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    margin-top: 16px;
+  }
+
+  /* QUESTION */
+  .question-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .question-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18px, 2.5vw, 22px);
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 28px;
+    color: var(--ink);
+  }
+
+  /* OPTIONS */
+  .options {
+    display: grid;
+    gap: 10px;
+  }
+
+  .option-btn {
+    background: white;
+    border: 1.5px solid rgba(26,20,16,0.12);
+    padding: 18px 22px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .option-btn::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0;
+    background: var(--accent);
+    transition: width 0.2s;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    transform: translateX(4px);
+  }
+  .option-btn:hover:not(:disabled)::before {
+    width: 3px;
+  }
+
+  .option-letter {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    font-weight: 500;
+    color: var(--muted);
+    min-width: 18px;
+    padding-top: 2px;
+    transition: color 0.2s;
+  }
+
+  .option-btn:hover .option-letter {
+    color: var(--accent);
+  }
+
+  /* FEEDBACK */
+  .option-btn.correct {
+    background: #f0faf4;
+    border-color: var(--correct);
+  }
+  .option-btn.correct::before { width: 4px; background: var(--correct); }
+  .option-btn.correct .option-letter { color: var(--correct); }
+
+  .option-btn.wrong {
+    background: #fdf0f0;
+    border-color: var(--wrong);
+    opacity: 0.8;
+  }
+  .option-btn.wrong::before { width: 4px; background: var(--wrong); }
+  .option-btn.wrong .option-letter { color: var(--wrong); }
+
+  .option-btn.dimmed { opacity: 0.4; }
+  .option-btn:disabled { cursor: default; }
+
+  /* FEEDBACK BOX */
+  .feedback-box {
+    display: none;
+    padding: 20px 24px;
+    margin-top: 20px;
+    border-left: 4px solid var(--correct);
+    background: #f0faf4;
+    animation: slideIn 0.3s ease;
+  }
+  .feedback-box.wrong-fb {
+    border-color: var(--wrong);
+    background: #fdf0f0;
+  }
+  .feedback-box.show { display: block; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .feedback-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .feedback-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #333;
+  }
+
+  .next-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 26px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: all 0.2s;
+    display: none;
+  }
+  .next-btn.show { display: inline-flex; }
+  .next-btn:hover {
+    background: var(--accent);
+    transform: translateX(4px);
+  }
+
+  /* ====== RESULT SCREEN ====== */
+  #result-screen {
+    min-height: 100vh;
+    display: none;
+  }
+
+  .result-header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 60px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result-header::before {
+    content: attr(data-bg-text);
+    position: absolute;
+    font-family: 'Playfair Display', serif;
+    font-size: 200px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.03);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .result-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  .result-emoji { font-size: 80px; margin-bottom: 20px; display: block; }
+
+  .result-level {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 7vw, 90px);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .result-sublevel {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: rgba(245,240,232,0.6);
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+
+  .result-ending {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18px, 2.5vw, 22px);
+    font-style: italic;
+    color: rgba(245,240,232,0.85);
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .result-body {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 50px 24px 80px;
+  }
+
+  .score-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 30px 0;
+  }
+
+  .score-dot {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+  .score-dot.hit { background: var(--ink); color: var(--paper); }
+  .score-dot.miss { background: transparent; color: var(--muted); }
+
+  .result-desc {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--ink);
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 0 20px;
+  }
+
+  .result-skills {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--ink);
+    border: 1px solid var(--ink);
+    margin-bottom: 40px;
+  }
+
+  .skill-item {
+    background: var(--cream);
+    padding: 20px;
+  }
+
+  .skill-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .skill-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .skill-status {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .restart-btn {
+    display: block;
+    width: 100%;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .restart-btn:hover { background: var(--accent); }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    #cover { grid-template-columns: 1fr; }
+    .cover-right { display: none; }
+    .cover-left { padding: 40px 28px; min-height: 100vh; }
+    .story-card { padding: 28px 24px; }
+    #question-screen { padding: 24px 16px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== COVER ====== -->
+<div id="cover" class="screen active">
+  <div class="cover-left">
+    <div>
+      <div class="cover-tag">✦ English Adventure</div>
+      <div class="cover-issue">Vol. 1 — Placement Edition</div>
+    </div>
+    <div>
+      <h1 class="cover-title">Lost in<br><em>Translation</em></h1>
+      <p class="cover-subtitle">You just landed in a new city. You have no map, no Wi-Fi, and your translator app is dead. All you have is your English. Will you survive?</p>
+      <button class="cover-btn" onclick="startGame()">Begin the Journey →</button>
+    </div>
+    <div class="cover-issue" style="opacity:0.4;">10 scenes · ~5 minutes · No pressure</div>
+  </div>
+  <div class="cover-right">
+    <div class="city-illustration">🌍</div>
+    <div class="cover-stats">
+      <div class="stat">
+        <div class="stat-num">10</div>
+        <div class="stat-label">Scenes</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">A1</div>
+        <div class="stat-label">to A2</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Outcomes</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== QUESTION SCREEN ====== -->
+<div id="question-screen" class="screen">
+  <div class="progress-bar-wrap">
+    <div class="progress-label" id="progress-label">SCENE 1 OF 10</div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:10%"></div></div>
+  </div>
+
+  <div class="story-card">
+    <div class="story-location" id="q-location"></div>
+    <div class="story-scene" id="q-scene"></div>
+    <div class="story-text" id="q-story"></div>
+    <div class="story-context" id="q-context"></div>
+    <div class="grammar-tag" id="q-tag"></div>
+  </div>
+
+  <div class="question-label">What do you say?</div>
+  <div class="question-text" id="q-question"></div>
+
+  <div class="options" id="options-container"></div>
+
+  <div class="feedback-box" id="feedback-box">
+    <div class="feedback-headline" id="fb-headline"></div>
+    <div class="feedback-text" id="fb-text"></div>
+  </div>
+
+  <button class="next-btn" id="next-btn" onclick="nextQuestion()">
+    Continue the story →
+  </button>
+</div>
+
+<!-- ====== RESULT SCREEN ====== -->
+<div id="result-screen" class="screen">
+  <div class="result-header" id="result-header">
+    <div class="result-tag">✦ End of Journey</div>
+    <span class="result-emoji" id="result-emoji"></span>
+    <div class="result-level" id="result-level"></div>
+    <div class="result-sublevel" id="result-sublevel"></div>
+    <p class="result-ending" id="result-ending"></p>
+  </div>
+  <div class="result-body">
+    <div class="score-display" id="score-display"></div>
+    <p class="result-desc" id="result-desc"></p>
+    <div class="result-skills" id="result-skills"></div>
+    <button class="restart-btn" onclick="restartGame()">↩ Try the journey again</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    location: "📍 Airport Arrivals Hall · 9:00 AM",
+    scene: "✈️",
+    story: "You step off the plane. A friendly local approaches, hand extended, smiling.",
+    context: "She's clearly trying to be welcoming. What's your move?",
+    tag: "✦ Greetings & Introduction",
+    question: "You've never met her. How do you introduce yourself?",
+    options: [
+      { text: "I am Maria. I from Brazil.", correct: false },
+      { text: "My name is Maria. I'm from Brazil.", correct: true },
+      { text: "I'm Maria and I come from Brazil.", correct: true },
+      { text: "Maria. Brazil.", correct: false }
+    ],
+    feedback_correct: {
+      headline: "She smiles warmly. ✓",
+      text: "A clean, natural introduction. She offers to help you find the exit — your adventure begins on a high note."
+    },
+    feedback_wrong: {
+      headline: "She looks a little confused. ✗",
+      text: "Something didn't land right. Don't worry — she was kind about it. Tip: always use 'My name is...' or 'I'm...' and pair it with 'I'm from [country].'"
+    }
+  },
+  {
+    location: "📍 Hotel Check-In · 10:30 AM",
+    scene: "🏨",
+    story: "The receptionist slides a form across the desk and asks what time you'd like a wake-up call for the morning.",
+    context: "You need to wake up at exactly 7 AM — big day tomorrow.",
+    tag: "✦ Daily Routine + Prepositions of Time",
+    question: "\"What time do you usually wake up?\"",
+    options: [
+      { text: "I wake up 7 o'clock.", correct: false },
+      { text: "I waking up at 7.", correct: false },
+      { text: "I wake up at 7 o'clock.", correct: true },
+      { text: "I'm wake up 7.", correct: false }
+    ],
+    feedback_correct: {
+      headline: "Room 412, all yours. ✓",
+      text: "Perfect. The receptionist notes it down without hesitation. The little word 'at' makes all the difference with times."
+    },
+    feedback_wrong: {
+      headline: "She asks you to repeat. ✗",
+      text: "Close! Prepositions with time are tricky. Remember: it's 'wake up AT 7 o'clock' — and the present simple form 'wake up', not 'waking up'."
+    }
+  },
+  {
+    location: "📍 Hotel Corridor · Yesterday's Memory",
+    scene: "💭",
+    story: "You meet a fellow traveler in the elevator. She's curious about your day so far.",
+    context: "Yesterday feels like a blur. But you did make it to work before catching your flight.",
+    tag: "✦ Simple Past · Irregular Verb",
+    question: "\"What did you do yesterday?\"",
+    options: [
+      { text: "I go to work yesterday.", correct: false },
+      { text: "I went to work.", correct: true },
+      { text: "I was go to work.", correct: false },
+      { text: "Yesterday I going work.", correct: false }
+    ],
+    feedback_correct: {
+      headline: "She nods, impressed. ✓",
+      text: "'Went' — the irregular past of 'go'. No need to add 'yesterday' since it's implied by the question. Clean and confident."
+    },
+    feedback_wrong: {
+      headline: "She tilts her head. ✗",
+      text: "'Go' becomes 'went' in the past — it's one of the most common irregular verbs. You never say 'I go' or 'I going' for past events."
+    }
+  },
+  {
+    location: "📍 Street Food Corner · Noon",
+    scene: "🍔",
+    story: "The smell hits you before you even see the stand. A classic burger place, hand-written menu, real fast food.",
+    context: "You're starving. The person at the counter is waiting.",
+    tag: "✦ Polite Requests + Articles",
+    question: "How do you order?",
+    options: [
+      { text: "I want hamburger and coke.", correct: false },
+      { text: "Want hamburger.", correct: false },
+      { text: "I'd like a hamburger and a coke, please.", correct: true },
+      { text: "Give me hamburger.", correct: false }
+    ],
+    feedback_correct: {
+      headline: "\"Coming right up!\" ✓",
+      text: "'I'd like...' is the gold standard for polite requests. And those little articles — 'a hamburger', 'a coke' — show real fluency."
+    },
+    feedback_wrong: {
+      headline: "The person looked surprised. ✗",
+      text: "Technically they'll understand you, but in English culture, directness without politeness can come across as rude. Try 'I'd like a [item], please.' Don't forget the articles!"
+    }
+  },
+  {
+    location: "📍 City Square · 2:00 PM",
+    scene: "📱",
+    story: "You got separated from the group. A local offers to help. They seem friendly — maybe you can swap numbers.",
+    context: "You need their phone number to coordinate.",
+    tag: "✦ Wh- Questions + Auxiliary Verb",
+    question: "What do you ask?",
+    options: [
+      { text: "You number?", correct: false },
+      { text: "What your phone number?", correct: false },
+      { text: "What is your phone number?", correct: true },
+      { text: "Your phone number what?", correct: false }
+    ],
+    feedback_correct: {
+      headline: "She types it in your phone. ✓",
+      text: "Textbook question structure: Wh- word + auxiliary verb (is) + subject + noun. This is the backbone of English questions."
+    },
+    feedback_wrong: {
+      headline: "She understood — but barely. ✗",
+      text: "English questions need a verb! 'What IS your phone number?' — never leave the verb out, even if it sounds fast in your head."
+    }
+  },
+  {
+    location: "📍 Café Terrace · 3:30 PM",
+    scene: "☕",
+    story: "A man at the next table notices you're from out of town. He pours from his thermos: 'Coffee?'",
+    context: "You absolutely cannot stand coffee. Never could.",
+    tag: "✦ Present Simple Negative",
+    question: "How do you decline?",
+    options: [
+      { text: "I no like coffee.", correct: false },
+      { text: "I not like coffee.", correct: false },
+      { text: "I don't like coffee.", correct: true },
+      { text: "No coffee for me.", correct: false }
+    ],
+    feedback_correct: {
+      headline: "He laughs and pours himself a cup. ✓",
+      text: "Perfect negative construction. In the present simple, you always need the auxiliary: 'I DON'T like...', never 'I no like' or 'I not like'."
+    },
+    feedback_wrong: {
+      headline: "He poured it anyway. ✗",
+      text: "To make a present simple sentence negative, you need 'don't': 'I don't like coffee.' Simple rules, big difference."
+    }
+  },
+  {
+    location: "📍 Hostel Common Room · 6:00 PM",
+    scene: "🎉",
+    story: "You've made some new friends. They're throwing an impromptu party Saturday night.",
+    context: "They're excited. And so are you.",
+    tag: "✦ Future Tense (will / going to)",
+    question: "\"Are you coming to the party on Saturday?\"",
+    options: [
+      { text: "Yes, I come.", correct: false },
+      { text: "Yes, I coming.", correct: false },
+      { text: "Yes, I'll come! / Yes, I'm going to come!", correct: true },
+      { text: "Yes, Saturday I go.", correct: false }
+    ],
+    feedback_correct: {
+      headline: "\"Yes! See you there!\" ✓",
+      text: "Two correct ways to express the future: 'will come' (spontaneous decision/promise) or 'going to come' (already planned). Both work here perfectly."
+    },
+    feedback_wrong: {
+      headline: "They looked unsure if you said yes. ✗",
+      text: "You can't use the present simple for future plans here. Use 'I'll come' or 'I'm going to come' to clearly express a future intention."
+    }
+  },
+  {
+    location: "📍 Hotel Gym · 7:30 AM",
+    scene: "⏰",
+    story: "A trainer spots you and strikes up a conversation about habits.",
+    context: "You exercise two times per week — Tuesdays and Fridays, always.",
+    tag: "✦ Adverbs of Frequency",
+    question: "\"How often do you exercise?\"",
+    options: [
+      { text: "I exercise two times week.", correct: false },
+      { text: "I exercise twice a week.", correct: true },
+      { text: "Two times I exercise.", correct: false },
+      { text: "I exercising twice.", correct: false }
+    ],
+    feedback_correct: {
+      headline: "\"Impressive consistency!\" ✓",
+      text: "'Twice a week' is the natural, fluent way. Notice how the frequency follows the verb, and 'twice' is more natural than 'two times'."
+    },
+    feedback_wrong: {
+      headline: "He wasn't sure what you meant. ✗",
+      text: "The correct form is 'I exercise twice a week.' Don't forget 'a' before the time period, and frequency comes after the verb."
+    }
+  },
+  {
+    location: "📍 Your Hotel Room · Night",
+    scene: "📍",
+    story: "You're video calling home. Your mom wants to know where everything is.",
+    context: "She asks about your phone. You look around. It's definitely on the table.",
+    tag: "✦ Prepositions of Place",
+    question: "\"Where's your phone?\"",
+    options: [
+      { text: "It's in the table.", correct: false },
+      { text: "It's on the table.", correct: true },
+      { text: "It's the table.", correct: false },
+      { text: "Table it's.", correct: false }
+    ],
+    feedback_correct: {
+      headline: "\"Got it, I see it!\" ✓",
+      text: "ON the table — for surfaces, we always use 'on'. We use 'in' for enclosed spaces (in the box, in the drawer). A small word, big difference."
+    },
+    feedback_wrong: {
+      headline: "\"What? I can't understand you.\" ✗",
+      text: "Use 'ON' for surfaces. 'In the table' would mean inside it (like a drawer). Always: on the table, in the bag, under the bed."
+    }
+  },
+  {
+    location: "📍 Rooftop Bar · Final Night",
+    scene: "📖",
+    story: "You meet Maria — a teacher from São Paulo who works at a local school. She says she loves her job, but confesses she really hates waking up early.",
+    context: "You've been talking for an hour. She's fascinating.",
+    tag: "✦ Reading Comprehension",
+    question: "Which of these is TRUE about Maria?",
+    options: [
+      { text: "Maria works in Rio.", correct: false },
+      { text: "Maria hates her job.", correct: false },
+      { text: "Maria likes her job.", correct: true },
+      { text: "Maria loves waking up early.", correct: false }
+    ],
+    feedback_correct: {
+      headline: "You understood perfectly. ✓",
+      text: "She likes her job — but doesn't like waking up early. These are two separate things. Reading carefully means catching the contrast."
+    },
+    feedback_wrong: {
+      headline: "You mixed something up. ✗",
+      text: "Maria works in São Paulo (not Rio), likes her job (doesn't hate it), but dislikes early mornings. Read for detail — every word counts."
+    }
+  }
+];
+
+let current = 0;
+let score = 0;
+let answers = [];
+
+function startGame() {
+  document.getElementById('cover').classList.remove('active');
+  document.getElementById('question-screen').classList.add('active');
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = questions[current];
+  document.getElementById('progress-label').textContent = `SCENE ${current + 1} OF ${questions.length}`;
+  document.getElementById('progress-fill').style.width = `${((current + 1) / questions.length) * 100}%`;
+
+  document.getElementById('q-location').innerHTML = q.location;
+  document.getElementById('q-scene').textContent = q.scene;
+  document.getElementById('q-story').textContent = q.story;
+  document.getElementById('q-context').textContent = q.context;
+  document.getElementById('q-tag').textContent = q.tag;
+  document.getElementById('q-question').textContent = q.question;
+
+  const container = document.getElementById('options-container');
+  container.innerHTML = '';
+
+  const letters = ['A', 'B', 'C', 'D'];
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${opt.text}</span>`;
+    btn.onclick = () => selectAnswer(i, opt.correct);
+    container.appendChild(btn);
+  });
+
+  // Reset feedback
+  const fb = document.getElementById('feedback-box');
+  fb.classList.remove('show', 'wrong-fb');
+  document.getElementById('next-btn').classList.remove('show');
+}
+
+function selectAnswer(index, isCorrect) {
+  const q = questions[current];
+  const btns = document.querySelectorAll('.option-btn');
+
+  btns.forEach(b => b.disabled = true);
+
+  if (isCorrect) {
+    btns[index].classList.add('correct');
+    score++;
+    answers.push(true);
+    showFeedback(q.feedback_correct, false);
+  } else {
+    btns[index].classList.add('wrong');
+    answers.push(false);
+    // Show correct answer
+    q.options.forEach((opt, i) => {
+      if (opt.correct) btns[i].classList.add('correct');
+      else if (i !== index) btns[i].classList.add('dimmed');
+    });
+    showFeedback(q.feedback_wrong, true);
+  }
+
+  document.getElementById('next-btn').classList.add('show');
+}
+
+function showFeedback(fb, isWrong) {
+  const box = document.getElementById('feedback-box');
+  document.getElementById('fb-headline').textContent = fb.headline;
+  document.getElementById('fb-text').textContent = fb.text;
+  if (isWrong) box.classList.add('wrong-fb');
+  box.classList.add('show');
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) {
+    showResult();
+    return;
+  }
+
+  const qs = document.getElementById('question-screen');
+  qs.style.opacity = '0';
+  qs.style.transition = 'opacity 0.3s';
+  setTimeout(() => {
+    showQuestion();
+    qs.style.opacity = '1';
+  }, 300);
+}
+
+function showResult() {
+  document.getElementById('question-screen').classList.remove('active');
+  const rs = document.getElementById('result-screen');
+  rs.classList.add('active');
+  rs.style.display = 'block';
+
+  const pct = score / questions.length;
+  let level, sublevel, emoji, ending, desc;
+
+  if (pct >= 0.9) {
+    level = "FLUENT"; sublevel = "A2+ / Ready for B1";
+    emoji = "🏆";
+    ending = "You navigated the entire city with grace. Every conversation, every order, every question — handled.";
+    desc = "Your English is strong and natural. Grammar structures click, vocabulary flows, and you communicate with real confidence. Time to push into B1 territory.";
+  } else if (pct >= 0.7) {
+    level = "TRAVELER"; sublevel = "Solid A2";
+    emoji = "🗺️";
+    ending = "You made it through with a few bumps, but no disasters. The city treated you well.";
+    desc = "You have a solid foundation. Most everyday situations are manageable for you. Focus on irregular verbs, question structures, and prepositions to smooth out the rough edges.";
+  } else if (pct >= 0.5) {
+    level = "EXPLORER"; sublevel = "A1–A2";
+    emoji = "🧭";
+    ending = "The journey was an adventure — in the truest sense. You survived, but barely.";
+    desc = "You know the basics and you're building up confidence. Keep practicing everyday phrases, verb tenses, and the small but mighty words like 'at', 'on', 'don't' that change everything.";
+  } else {
+    level = "WANDERER"; sublevel = "A1 Beginner";
+    emoji = "🌱";
+    ending = "The city was a mystery. A beautiful, overwhelming mystery. But every journey starts somewhere.";
+    desc = "You're at the beginning — and that's completely okay. Focus on present simple, basic introductions, and key phrases. Every expert was once where you are now.";
+  }
+
+  document.getElementById('result-emoji').textContent = emoji;
+  document.getElementById('result-level').textContent = level;
+  document.getElementById('result-sublevel').textContent = sublevel;
+  document.getElementById('result-ending').textContent = ending;
+  document.getElementById('result-desc').textContent = desc;
+  document.getElementById('result-header').setAttribute('data-bg-text', level);
+
+  // Score dots
+  const dots = document.getElementById('score-display');
+  dots.innerHTML = answers.map((hit, i) =>
+    `<div class="score-dot ${hit ? 'hit' : 'miss'}" title="Scene ${i+1}">${hit ? '✓' : '✗'}</div>`
+  ).join('');
+
+  // Skills grid
+  const skillNames = [
+    "Greetings", "Time Expressions", "Simple Past", "Polite Requests",
+    "Wh- Questions", "Negatives", "Future Tense", "Frequency",
+    "Prepositions", "Comprehension"
+  ];
+  const skillsEl = document.getElementById('result-skills');
+  skillsEl.innerHTML = answers.map((hit, i) => `
+    <div class="skill-item">
+      <div class="skill-label">Scene ${i+1}</div>
+      <div class="skill-name">${skillNames[i]}</div>
+      <div class="skill-status">${hit ? '✓ Nailed it' : '✗ Review this'}</div>
+    </div>
+  `).join('');
+
+  // Envia os dados para a planilha do Google
+  enviarDadosParaPlanilha(level, score, answers);
+}
+
+function enviarDadosParaPlanilha(level, score, answers) {
+  const URL_PLANILHA = "https://script.google.com/macros/s/AKfycbx2IB97pBKiMZ-A1ymE5uLr16Q3M2Hk_6DP8w2_MPC3YSqThrRAaBadznb0Z1DWQ2hK/exec";
+  fetch(URL_PLANILHA, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      level: level,
+      score: score,
+      answers: answers
+    })
+  }).then(() => {
+    console.log("Dados salvos com sucesso!");
+  }).catch((err) => {
+    console.warn("Erro ao salvar dados:", err);
+  });
+}
+
+function restartGame() {
+  current = 0; score = 0; answers = [];
+  document.getElementById('result-screen').classList.remove('active');
+  document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('cover').classList.add('active');
+}
+</script>
+</body>
+</html>
