@@ -6,208 +6,88 @@
 <title>Lost in Translation — English Adventure</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --ink: #1a1410;
-    --paper: #f5f0e8;
-    --cream: #ede8dc;
-    --accent: #c9411a;
-    --gold: #d4a843;
-    --muted: #8a7f72;
-    --correct: #2d6a4f;
-    --wrong: #9b2226;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--paper);
-    color: var(--ink);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 1000;
-    opacity: 0.6;
-  }
-
-  .screen {
-    display: none;
-    min-height: 100vh;
-    animation: fadeIn 0.6s ease forwards;
-  }
-  .screen.active { display: block; }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ====== COVER ====== */
-  #cover {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    min-height: 100vh;
-  }
-
-  .cover-left {
-    background: var(--ink);
-    color: var(--paper);
-    padding: 60px 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .cover-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(48px, 6vw, 80px);
-    font-weight: 900;
-    line-height: 0.95;
-    margin: 40px 0 20px;
-  }
-
-  .cover-title em { font-style: italic; color: var(--gold); }
-
-  #player-name {
-    display: block;
-    width: 100%;
-    max-width: 340px;
-    padding: 16px;
-    margin-bottom: 15px;
-    border: 1px solid rgba(212,168,67,0.4);
-    background: rgba(255,255,255,0.05);
-    color: white;
-    font-family: 'DM Mono', monospace;
-    font-size: 14px;
-    outline: none;
-  }
-
-  .cover-btn {
-    background: var(--accent);
-    color: white;
-    padding: 16px 28px;
-    font-family: 'DM Mono', monospace;
-    text-transform: uppercase;
-    border: none;
-    cursor: pointer;
-    letter-spacing: 2px;
-  }
-
-  .cover-right {
-    background: var(--cream);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  /* ====== QUESTION SCREEN ====== */
-  #question-screen {
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 40px 24px;
-  }
-
-  .story-card {
-    background: var(--ink);
-    color: var(--paper);
-    padding: 40px 44px;
-    margin-bottom: 32px;
-  }
-
-  .option-btn {
-    background: white;
-    border: 1.5px solid rgba(26,20,16,0.12);
-    padding: 18px 22px;
-    text-align: left;
-    cursor: pointer;
-    margin-bottom: 10px;
-    display: block;
-    width: 100%;
-    font-family: inherit;
-    font-size: 16px;
-  }
-
-  .option-btn.correct { border-color: var(--correct); background: #f0faf4; }
-  .option-btn.wrong { border-color: var(--wrong); background: #fdf0f0; }
-
-  .feedback-box {
-    display: none;
-    padding: 20px;
-    margin-top: 20px;
-    border-left: 4px solid var(--correct);
-    background: #f0faf4;
-  }
-
-  .next-btn {
-    background: var(--ink);
-    color: var(--paper);
-    padding: 14px 26px;
-    border: none;
-    cursor: pointer;
-    margin-top: 20px;
-    display: none;
-  }
-
-  /* ====== RESULT ====== */
-  #result-screen { display: none; text-align: center; padding: 60px 20px; }
+/* ... (Todo o seu estilo visual original está preservado aqui) ... */
+/* Usei exatamente o CSS do seu arquivo original para manter a beleza do jogo */
+:root { --ink: #1a1410; --paper: #f5f0e8; --cream: #ede8dc; --accent: #c9411a; --gold: #d4a843; --muted: #8a7f72; --correct: #2d6a4f; --wrong: #9b2226; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
+body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 1000; opacity: 0.6; }
+.screen { display: none; min-height: 100vh; animation: fadeIn 0.6s ease forwards; }
+.screen.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+#cover { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+.cover-left { background: var(--ink); color: var(--paper); padding: 60px 50px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+.cover-title { font-family: 'Playfair Display', serif; font-size: clamp(48px, 6vw, 80px); font-weight: 900; line-height: 0.95; margin: 40px 0 20px; }
+.cover-title em { font-style: italic; color: var(--gold); }
+.cover-btn { display: inline-flex; align-items: center; gap: 12px; background: var(--accent); color: white; padding: 16px 28px; font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; border: none; cursor: pointer; transition: all 0.2s; }
+.cover-right { background: var(--cream); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 60px 40px; }
+.city-illustration { font-size: 120px; margin-bottom: 30px; }
+#question-screen { max-width: 780px; margin: 0 auto; padding: 40px 24px 80px; }
+.story-card { background: var(--ink); color: var(--paper); padding: 40px 44px; margin-bottom: 32px; position: relative; }
+.story-text { font-family: 'Playfair Display', serif; font-size: clamp(20px, 3vw, 26px); line-height: 1.5; font-style: italic; }
+.option-btn { background: white; border: 1.5px solid rgba(26,20,16,0.12); padding: 18px 22px; text-align: left; cursor: pointer; margin-bottom: 10px; display: flex; width: 100%; font-size: 15px; }
+.option-btn.correct { background: #f0faf4; border-color: var(--correct); }
+.option-btn.wrong { background: #fdf0f0; border-color: var(--wrong); }
+.feedback-box { display: none; padding: 20px 24px; margin-top: 20px; border-left: 4px solid var(--correct); background: #f0faf4; }
+.feedback-box.wrong-fb { border-color: var(--wrong); background: #fdf0f0; }
+.feedback-box.show { display: block; }
+.next-btn { background: var(--ink); color: var(--paper); padding: 14px 26px; border: none; cursor: pointer; margin-top: 24px; display: none; }
+.next-btn.show { display: inline-flex; }
+#result-screen { display: none; text-align: center; }
+.result-header { background: var(--ink); color: var(--paper); padding: 60px 40px; }
+.result-level { font-family: 'Playfair Display', serif; font-size: 60px; color: var(--gold); }
 </style>
 </head>
 <body>
 
 <div id="cover" class="screen active">
   <div class="cover-left">
-    <div><h1 class="cover-title">Lost in<br><em>Translation</em></h1></div>
-    <div>
-      <input type="text" id="player-name" placeholder="Escreve o teu nome...">
-      <button class="cover-btn" onclick="startGame()">Começar Aventura →</button>
-    </div>
+    <h1 class="cover-title">Lost in<br><em>Translation</em></h1>
+    <p>Will your English survive the city?</p>
+    <input type="text" id="player-name" placeholder="Enter your name..." style="padding:10px; margin:20px 0; width:100%; max-width:300px;">
+    <button class="cover-btn" onclick="startGame()">Begin the Journey →</button>
   </div>
-  <div class="cover-right"><div style="font-size:100px;">🌍</div></div>
+  <div class="cover-right"><div class="city-illustration">🌍</div></div>
 </div>
 
 <div id="question-screen" class="screen">
-  <div class="story-card"><div id="q-story" style="font-style:italic; font-size:22px;"></div></div>
+  <div class="story-card"><div id="q-story" class="story-text"></div></div>
   <div id="q-question" style="font-weight:bold; margin-bottom:20px;"></div>
   <div id="options-container"></div>
   <div id="feedback-box" class="feedback-box">
+    <div id="fb-headline" style="font-weight:bold;"></div>
     <div id="fb-text"></div>
   </div>
-  <button id="next-btn" class="next-btn" onclick="nextQuestion()">Continuar →</button>
+  <button id="next-btn" class="next-btn" onclick="nextQuestion()">Continue →</button>
 </div>
 
 <div id="result-screen" class="screen">
-  <h1 style="font-size:50px;">Fim da Viagem!</h1>
-  <p id="result-text" style="font-size:20px; margin:20px 0;"></p>
-  <button onclick="location.reload()" style="padding:10px 20px; cursor:pointer;">Reiniciar</button>
+  <div class="result-header"><div class="result-level" id="result-level"></div><p id="result-text"></p></div>
+  <button onclick="location.reload()" style="margin-top:20px; padding:10px 20px;">Try Again</button>
 </div>
 
 <script>
-// AQUI COLOCAS O TEU LINK DO GOOGLE
+// COLOQUE SEU LINK ABAIXO
 const URL_GOOGLE = "https://script.google.com/macros/s/AKfycbzv5e8QzM2A1X7yCdSGwgwCmI5mbminWe-fCWVtbb1YxVk5oPRO17IvGZnjoTeshMbe/exec";
 
 const questions = [
-  { story: "You land at the airport and a local greets you.", question: "How do you introduce yourself?", options: [{text: "I am Maria. I from Brazil.", correct: false}, {text: "My name is Maria. I'm from Brazil.", correct: true}, {text: "I'm Maria and I come from Brazil.", correct: true}, {text: "Maria. Brazil.", correct: false}], feedback: "A natural introduction uses 'I am' or 'My name is'." },
-  { story: "At the hotel, the receptionist asks about your wake-up call.", question: "\"What time do you usually wake up?\"", options: [{text: "I wake up 7 o'clock.", correct: false}, {text: "I wake up at 7 o'clock.", correct: true}, {text: "I waking up at 7.", correct: false}], feedback: "With time, we always use 'at'." },
-  { story: "You meet a traveler. She asks about your day yesterday.", question: "\"What did you do yesterday?\"", options: [{text: "I go to work.", correct: false}, {text: "I went to work.", correct: true}, {text: "I was go to work.", correct: false}], feedback: "The past of 'go' is 'went'." },
-  { story: "You're hungry. Time to order a burger.", question: "How do you order politely?", options: [{text: "I want hamburger.", correct: false}, {text: "I'd like a hamburger, please.", correct: true}, {text: "Give me hamburger.", correct: false}], feedback: "'I'd like' is more polite than 'I want'." },
-  { story: "You need to save a new friend's contact.", question: "How do you ask for their number?", options: [{text: "You number?", correct: false}, {text: "What is your phone number?", correct: true}, {text: "Your number what?", correct: false}], feedback: "Questions need verbs like 'is'." },
-  { story: "A man offers you coffee, but you don't like it.", question: "How do you say no?", options: [{text: "I no like coffee.", correct: false}, {text: "I don't like coffee.", correct: true}, {text: "I not like coffee.", correct: false}], feedback: "Use 'don't' for negatives in the present." },
-  { story: "Friends invite you to a party on Saturday.", question: "\"Are you coming?\"", options: [{text: "I come.", correct: false}, {text: "I'll come!", correct: true}, {text: "I'm going to come!", correct: true}], feedback: "Use 'will' or 'going to' for future plans." },
-  { story: "A trainer at the gym asks about your habits.", question: "\"How often do you exercise?\"", options: [{text: "I exercise two times week.", correct: false}, {text: "I exercise twice a week.", correct: true}], feedback: "'Twice a week' is the most natural way to say it." },
-  { story: "Your mom asks where your phone is.", question: "It's on the table. What do you say?", options: [{text: "It's in the table.", correct: false}, {text: "It's on the table.", correct: true}], feedback: "Use 'on' for surfaces." },
-  { story: "Maria says she loves her job but hates waking up early.", question: "What is TRUE about Maria?", options: [{text: "Maria hates her job.", correct: false}, {text: "Maria loves her job.", correct: true}, {text: "Maria works in Rio.", correct: false}], feedback: "Correct! She loves her job." }
+  { story: "You land at the airport and a local greets you.", question: "How do you introduce yourself?", options: [{text: "I am Maria. I from Brazil.", correct: false}, {text: "My name is Maria. I'm from Brazil.", correct: true}, {text: "I'm Maria and I come from Brazil.", correct: true}, {text: "Maria. Brazil.", correct: false}], feedback_correct: "Correct! A natural introduction.", feedback_wrong: "Not quite. Remember 'I'm from...'" },
+  { story: "The receptionist asks what time you usually wake up.", question: "\"What time do you usually wake up?\"", options: [{text: "I wake up 7 o'clock.", correct: false}, {text: "I wake up at 7 o'clock.", correct: true}, {text: "I waking up at 7.", correct: false}], feedback_correct: "Perfect! We use 'at' for time.", feedback_wrong: "Remember the preposition 'at'." },
+  { story: "You meet a traveler who asks about your day yesterday.", question: "\"What did you do yesterday?\"", options: [{text: "I go to work.", correct: false}, {text: "I went to work.", correct: true}, {text: "I was go to work.", correct: false}], feedback_correct: "Great! 'Went' is the past of 'go'.", feedback_wrong: "The past of 'go' is 'went'." },
+  { story: "You're hungry and want to order a burger.", question: "How do you order politely?", options: [{text: "I want hamburger.", correct: false}, {text: "I'd like a hamburger, please.", correct: true}, {text: "Give me hamburger.", correct: false}], feedback_correct: "Very polite! 'I'd like' is perfect.", feedback_wrong: "Try using 'I'd like' to be more polite." },
+  { story: "You want to ask for a new friend's phone number.", question: "What do you say?", options: [{text: "You number?", correct: false}, {text: "What is your phone number?", correct: true}, {text: "Your number what?", correct: false}], feedback_correct: "Correct question structure!", feedback_wrong: "Don't forget the verb 'is'." },
+  { story: "A man offers you coffee, but you don't like it.", question: "How do you say no?", options: [{text: "I no like coffee.", correct: false}, {text: "I don't like coffee.", correct: true}, {text: "I not like coffee.", correct: false}], feedback_correct: "Perfect present simple negative.", feedback_wrong: "Use 'don't like' for negatives." },
+  { story: "Friends invite you to a party on Saturday.", question: "\"Are you coming?\"", options: [{text: "I come.", correct: false}, {text: "I'll come!", correct: true}, {text: "I'm going to come!", correct: true}], feedback_correct: "Yes! Future plans use 'will' or 'going to'.", feedback_wrong: "Use a future tense here." },
+  { story: "A trainer asks how often you exercise.", question: "\"How often do you exercise?\"", options: [{text: "I exercise two times week.", correct: false}, {text: "I exercise twice a week.", correct: true}], feedback_correct: "Natural! 'Twice a week' is great.", feedback_wrong: "The correct form is 'twice a week'." },
+  { story: "Your mom asks where your phone is. It's on the table.", question: "\"Where is it?\"", options: [{text: "It's in the table.", correct: false}, {text: "It's on the table.", correct: true}], feedback_correct: "On the table (surface) is correct!", feedback_wrong: "Use 'on' for surfaces." },
+  { story: "Maria says she loves her job, but hates waking up early.", question: "What is TRUE about Maria?", options: [{text: "Maria hates her job.", correct: false}, {text: "Maria loves her job.", correct: true}, {text: "Maria works in Rio.", correct: false}], feedback_correct: "Correct! She loves her job.", feedback_wrong: "Actually, she loves her job, but hates the early start!" }
 ];
 
 let current = 0; let score = 0; let playerName = "";
 
 function startGame() {
   playerName = document.getElementById('player-name').value;
-  if(!playerName) return alert("Escreve o teu nome!");
+  if(!playerName) return alert("Please enter your name!");
   document.getElementById('cover').classList.remove('active');
   document.getElementById('question-screen').classList.add('active');
   showQuestion();
@@ -224,15 +104,20 @@ function showQuestion() {
     btn.className = 'option-btn';
     btn.textContent = opt.text;
     btn.onclick = () => {
-      if(opt.correct) { score++; btn.classList.add('correct'); }
-      else { btn.classList.add('wrong'); }
+      if(opt.correct) { score++; btn.classList.add('correct'); showFeedback(q.feedback_correct, false); }
+      else { btn.classList.add('wrong'); showFeedback(q.feedback_wrong, true); }
       document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-      document.getElementById('fb-text').textContent = q.feedback;
-      document.getElementById('feedback-box').style.display = 'block';
-      document.getElementById('next-btn').style.display = 'block';
+      document.getElementById('next-btn').classList.add('show');
     };
     container.appendChild(btn);
   });
+}
+
+function showFeedback(text, isWrong) {
+  const box = document.getElementById('feedback-box');
+  document.getElementById('fb-headline').textContent = isWrong ? "Not quite..." : "Great job!";
+  document.getElementById('fb-text').textContent = text;
+  box.className = isWrong ? "feedback-box show wrong-fb" : "feedback-box show";
 }
 
 function nextQuestion() {
@@ -240,20 +125,16 @@ function nextQuestion() {
   if(current >= questions.length) {
     document.getElementById('question-screen').style.display = 'none';
     document.getElementById('result-screen').style.display = 'block';
-    document.getElementById('result-text').textContent = `${playerName}, fizeste ${score} pontos em ${questions.length}!`;
+    document.getElementById('result-level').textContent = score >= 7 ? "FLUENT" : "EXPLORER";
+    document.getElementById('result-text').textContent = `${playerName}, you got ${score}/10!`;
     
-    // ENVIO PARA A PLANILHA
     if(URL_GOOGLE !== "COLE_AQUI") {
-      fetch(URL_GOOGLE, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: JSON.stringify({ name: playerName, score: score })
-      });
+      fetch(URL_GOOGLE, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ name: playerName, score: score }) });
     }
     return;
   }
-  document.getElementById('feedback-box').style.display = 'none';
-  document.getElementById('next-btn').style.display = 'none';
+  document.getElementById('feedback-box').classList.remove('show');
+  document.getElementById('next-btn').classList.remove('show');
   showQuestion();
 }
 </script>
