@@ -78,11 +78,12 @@
   <div id="result-name" style="font-size: 24px; margin-top: 20px;"></div>
   <div class="result-score" id="result-final-score"></div>
   <p>The journey is complete. Your results were sent to the instructors.</p>
+  <div id="teacher-link-area" style="display:none;max-width:420px;margin:0 auto;"></div>
   <button class="cover-btn" style="margin-top: 30px;" onclick="location.reload()">Try again</button>
 </div>
 
 <script>
-const URL_GOOGLE_SHEETS = "https://script.google.com/macros/s/AKfycbxbcY-5RX76-fKFLXpMakH4x2i6-qD0knb6zBWa17hBLtM_R_Y8VS69S6aLeXeJ2rHyqA/exec";
+const URL_GOOGLE_SHEETS = "https://script.google.com/macros/s/AKfycbxqOsBGRqgZ_HQERgaXaT1jBUJi-ChHep7d4HaLv84AlkcccZinXrCM9CVs6_qy4cBdgg/exec";
 
 const questions = [
   {
@@ -282,11 +283,46 @@ function showResult() {
   document.getElementById('result-name').textContent = `Congratulations, ${playerName}!`;
   document.getElementById('result-final-score').textContent = `${score}/${questions.length}`;
 
+  // Envia para a planilha
   fetch(URL_GOOGLE_SHEETS, {
     method: 'POST',
     mode: 'no-cors',
-    body: JSON.stringify({ name: playerName, score: score, answers: detailedAnswers.join(",") })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      _template: "jogo_a1a2",
+      tipo: "a1a2",
+      name: playerName,
+      score: score,
+      answers: detailedAnswers,
+      data: new Date().toISOString().slice(0,10)
+    })
   });
+
+  // Gera o link para a professora abrir o Template 2 já preenchido
+  const params = new URLSearchParams({
+    aluno: playerName,
+    tipo: "a1a2",
+    score: score,
+    respostas: detailedAnswers.join(","),
+    data: new Date().toISOString().slice(0,10)
+  });
+  const TEMPLATE2_URL = "COLE_AQUI_A_URL_DO_TEMPLATE2_NO_GITHUB";
+  const linkProfessora = `${TEMPLATE2_URL}?${params.toString()}`;
+
+  // Mostra o link na tela de resultado
+  const linkDiv = document.getElementById('teacher-link-area');
+  if (linkDiv) {
+    linkDiv.innerHTML = `
+      <div style="margin-top:24px;padding:16px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);text-align:center;">
+        <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:10px;font-family:monospace;">📋 Link para a professora</div>
+        <a href="${linkProfessora}" target="_blank"
+           style="display:inline-block;background:#D48C1E;color:#1a1208;padding:12px 24px;font-family:monospace;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;">
+          Abrir Template de Análise →
+        </a>
+        <div style="margin-top:10px;font-size:10px;color:rgba(255,255,255,0.3);font-family:monospace;">O template já vai estar preenchido com seus resultados</div>
+      </div>`;
+    linkDiv.style.display = 'block';
+  }
 }
 </script>
 </body>
